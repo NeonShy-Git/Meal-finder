@@ -36,9 +36,11 @@ function MainPage(){
     return (
         <div className='container'>
             <h1>BUSCADOR GENERAL</h1>
-            <div>
+            <div className='search-container'>
                 <SearchBarWithIcon searchWord={searchWord} setSearchWord={setSearchWord}/>
-                <button onClick={searchMeal} className='search-button'>Buscar</button>
+                <button onClick={searchMeal} className='search-button'><span className="material-symbols-outlined">
+                    search
+                </span></button>
                 <button onClick={searchRandomMeal} className='search-random-button'>Shuffle</button>
             </div>
             <ComponentImage />

@@ -57,10 +57,16 @@
 .search-bar{
   padding: 0.5em;
   font-size: 1.5em;
-  border-radius:  8px 0 0 8px;
+  /* border-radius:  8px 0 0 8px; */
+  border-radius:  8px 8px 8px 8px;
 }
 
 .to-remove-rounded{
   border-radius: 0 8px 8px 0;
 }
 
+.search-container{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
