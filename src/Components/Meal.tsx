@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 interface MealDetail {
   strMeal: string;
@@ -13,6 +13,7 @@ interface MealDetail {
 function Meal() {
   const { id } = useParams<{ id: string }>();
   const [meal, setMeal] = useState<MealDetail | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMeal = async () => {
@@ -27,24 +28,42 @@ function Meal() {
 
   const ingredients = [];
   for (let i = 1; i <= 20; i++) {
+    const ingredient = meal[`strIngredient${i}`];
+    const quantity = meal[`strMeasure${i}`];
     if (meal[`strIngredient${i}`]) {
-      ingredients.push(`${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]}`);
-    } else break;
+      ingredients.push(`${ingredient} - ${quantity}`);
+    }
   }
 
   return (
-    <div className="single-meal">
-      <h1>{meal.strMeal}</h1>
-      <img src={meal.strMealThumb} alt={meal.strMeal} />
-      <p>{meal.strCategory} | {meal.strArea}</p>
+    <div className="meal-details-wrapper">
+      <button className="back-button" onClick={() => navigate(-1)}>
+         Back home
+      </button>
 
-      <h2>Ingredientes</h2>
-      <ul>
-        {ingredients.map((ing, i) => <li key={i}>{ing}</li>)}
-      </ul>
+      <div className="meal-details-container">
+        <header className='meal-header'>
+          <h1>{meal.strMeal}</h1>
+            <span className="meal-category">{meal.strCategory}</span>
+            <span className="meal-area">{meal.strArea}</span>
+        </header>
+        <div className="meal-image-container">
+            <img src={meal.strMealThumb} alt={meal.strMeal} />
+        </div>
+        <div className="meal-instructions">
+          <section>
+            <h2>Ingredientes</h2>
+              <ul className='meal-ingredients'>
+                {ingredients.map((ing, i) => <li key={i}>{ing}</li>)}
+              </ul>
+          </section>
+        </div>
+      </div>
 
-      <h2>Instrucciones</h2>
-      <p>{meal.strInstructions}</p>
+      <section className='meal-section'>
+        <h2>Instrucciones</h2>
+        <p>{meal.strInstructions}</p>
+      </section>
     </div>
   );
 }

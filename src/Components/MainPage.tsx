@@ -14,6 +14,7 @@ function MainPage(){
     const [meals, setMeals] = useState<MealType[]>([]);
     const [resultHeading, setResultHeading] = useState('');
     const navigate = useNavigate();
+    const [hasSearched, setHasSearched] = useState(false);
 
     const searchMeal = async ()=>{
         if(!searchWord.trim()) return console.error('There is nothing to search for.');
@@ -23,6 +24,7 @@ function MainPage(){
 
         setMeals(data.meals || []);
         setResultHeading(data.meals ? `${searchWord} results:`: `Error 404`);
+        setHasSearched(true);
         setSearchWord('');
     };
 
@@ -30,7 +32,9 @@ function MainPage(){
         const response = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
         const data = await response.json();
         const meal = data.meals[0];
-        navigate(`/meal/${meal.idMeal}`);
+        setMeals([meal]);
+        setResultHeading('Random Meal:');
+        setHasSearched(true);
     };
 
     return (
@@ -39,16 +43,16 @@ function MainPage(){
             <div className='search-container'>
                 <SearchBarWithIcon searchWord={searchWord} setSearchWord={setSearchWord}/>
                 <button onClick={searchMeal} className='search-button'><span className="material-symbols-outlined">
-                    search
+                    search  
                 </span></button>
                 <button onClick={searchRandomMeal} className='search-random-button'>Shuffle</button>
             </div>
-            <ComponentImage />
+            {!hasSearched && <ComponentImage />}
             <h1>{resultHeading}</h1>
             
             <div className='mealsresults'>
                 {meals.map(meal =>(
-                    <div key={meal.idMeal} className='mealresult' onClick={() => navigate(`/meal/${meal.idMeal}`)}>
+                    <div key={meal.idMeal} className='mealresult' onClick={() => navigate(`/meal/${meal.idMeal}`)} style={{cursor:`pointer`}}>
                         <img src = {meal.strMealThumb} alt={meal.strMeal} />
                         <div className='meal-detail'>
                             <h4>{meal.strMeal}</h4>
